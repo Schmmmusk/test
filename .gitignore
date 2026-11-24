@@ -1,0 +1,6 @@
+docs/软件工程_*
+docs/授课ppt/*
+backend/.venv/
+__pycache__/
+*.pyc
+.workbuddy/*

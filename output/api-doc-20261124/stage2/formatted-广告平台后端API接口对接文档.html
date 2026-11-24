@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="docx-page-size" content="A4">
+<title>广告平台后端 API 接口对接文档</title>
+<style>
+:root {
+  --typography-fontFamily-heading: "Microsoft YaHei", "微软雅黑", sans-serif;
+  --typography-fontFamily-body: "Microsoft YaHei", "微软雅黑", sans-serif;
+  --typography-fontFamily-mono: Consolas, monospace;
+  --typography-fontSize-h1: 18pt;
+  --typography-fontSize-h2: 15pt;
+  --typography-fontSize-h3: 13pt;
+  --typography-fontSize-body: 12pt;
+  --typography-fontSize-small: 10.5pt;
+  --typography-lineHeight-body: 1.6;
+  --typography-lineHeight-heading: 1.3;
+  --typography-fontWeight-bold: 700;
+  --typography-fontWeight-normal: 400;
+  --fs-h1: var(--typography-fontSize-h1);
+  --fs-h2: var(--typography-fontSize-h2);
+  --fs-h3: var(--typography-fontSize-h3);
+  --fs-body: var(--typography-fontSize-body);
+  --fs-small: var(--typography-fontSize-small);
+  --ff-heading: var(--typography-fontFamily-heading);
+  --ff-body: var(--typography-fontFamily-body);
+  --ff-mono: var(--typography-fontFamily-mono, monospace);
+  --lh-body: var(--typography-lineHeight-body);
+  --lh-heading: var(--typography-lineHeight-heading);
+  --fw-bold: var(--typography-fontWeight-bold);
+  --fw-normal: var(--typography-fontWeight-normal);
+  --color-primary: #1565C0;
+  --color-text: #212121;
+  --color-muted: #616161;
+  --color-border: #E0E0E0;
+  --color-bg: #F5F7FA;
+  --color-callout-bg: #FFF4E5;
+  --spacing-paragraph: 0.75em;
+  --spacing-section: 2em;
+  --spacing-block: 1.2em;
+  --layout-margin: 3.17cm;
+  --layout-contentWidth: 15.6cm;
+  --margin-page: var(--layout-margin);
+  --page-content-width: var(--layout-contentWidth, 15.6cm);
+}
+@page { margin: 2.5cm; }
+body {
+  max-width: var(--page-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+}
+h1 {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-heading);
+  color: var(--color-primary);
+  text-align: left;
+  margin-top: var(--spacing-section);
+  margin-bottom: var(--spacing-block);
+}
+h2 {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-heading);
+  color: var(--color-primary);
+  text-align: left;
+  margin-top: var(--spacing-section);
+  margin-bottom: var(--spacing-block);
+}
+h3 {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-heading);
+  color: var(--color-text);
+  text-align: left;
+  margin-top: var(--spacing-block);
+  margin-bottom: var(--spacing-paragraph);
+}
+p {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  text-indent: 2em;
+  text-align: justify;
+  margin-bottom: var(--spacing-paragraph);
+}
+ul, ol {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin-bottom: var(--spacing-paragraph);
+}
+li {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin-bottom: 0.3em;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-block);
+  margin-bottom: var(--spacing-block);
+  font-family: var(--ff-body);
+  font-size: var(--fs-small);
+}
+caption {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-bold);
+  text-align: left;
+  margin-bottom: 0.4em;
+}
+th {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  padding: 6px 8px;
+  text-align: left;
+  font-weight: var(--fw-bold);
+}
+td {
+  border: 1px solid var(--color-border);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+code {
+  font-family: var(--ff-mono);
+  font-size: var(--fs-small);
+}
+pre {
+  font-family: var(--ff-mono);
+  font-size: var(--fs-small);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: 10px;
+  margin-top: var(--spacing-paragraph);
+  margin-bottom: var(--spacing-block);
+  line-height: 1.4;
+}
+.doc-title {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  color: var(--color-primary);
+  text-align: center;
+  text-indent: 0;
+  margin-top: 1em;
+  margin-bottom: 0.4em;
+}
+.doc-subtitle {
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  color: var(--color-muted);
+  text-align: center;
+  text-indent: 0;
+  margin-bottom: var(--spacing-section);
+}
+.toc-title {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  text-indent: 0;
+  text-align: left;
+  margin-bottom: var(--spacing-block);
+}
+.toc-list, .toc-list ol, .toc-list ul { list-style: none; }
+.toc-list { padding-left: 0; }
+.toc-list ol { padding-left: 1.5em; }
+.toc-list li { margin-bottom: 0.35em; }
+.toc-list a { color: var(--color-primary); text-decoration: none; }
+.callout {
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-callout-bg);
+  padding: 8px 10px;
+  text-indent: 0;
+  margin-top: var(--spacing-block);
+  margin-bottom: var(--spacing-block);
+}
+</style>
+</head>
+<body>
+<section role="body" data-page-restart="1">
+
+<p class="doc-title">广告平台后端 API 接口对接文档</p>
+<p class="doc-subtitle">面向前端开发人员 · 基于后端实际代码核实 · 2026 年 11 月</p>
+
+<nav class="doc-toc" aria-label="文档目录">
+<p class="toc-title">目录</p>
+<ol class="toc-list">
+  <li><a href="#s1">一、文档说明</a></li>
+  <li><a href="#s2">二、鉴权约定</a></li>
+  <li><a href="#s3">三、用户接口详解</a>
+    <ol>
+      <li><a href="#s3-1">3.1 注册</a></li>
+      <li><a href="#s3-2">3.2 登录</a></li>
+      <li><a href="#s3-3">3.3 查看广告列表</a></li>
+      <li><a href="#s3-4">3.4 新建广告</a></li>
+      <li><a href="#s3-5">3.5 充值</a></li>
+      <li><a href="#s3-6">3.6 查看充值流水</a></li>
+      <li><a href="#s3-7">3.7 查看站内信</a></li>
+      <li><a href="#s3-8">3.8 数据报表</a></li>
+    </ol>
+  </li>
+  <li><a href="#s4">四、管理员接口详解</a></li>
+  <li><a href="#s5">五、对外接口详解</a></li>
+  <li><a href="#s6">六、错误码汇总</a></li>
+  <li><a href="#s7">七、前端接入建议</a></li>
+  <li><a href="#s8">八、联调验证说明</a></li>
+</ol>
+</nav>
+
+<h1 id="s1">一、文档说明</h1>
+<p>本文档面向前端开发人员，描述「基于 Web 的互联网广告平台系统」后端 API 的对接方式。文档内容依据后端实际代码逐项核实，覆盖 13 个接口的请求规格、响应格式、鉴权方式与错误码，可作为前端开发的直接对接依据。</p>
+<p>后端技术栈为 Django 5.2 + Django REST Framework 3.18 + MySQL 8.0。所有接口统一返回 JSON，字符编码为 UTF-8。时间字段采用 ISO 8601 格式（如 2026-11-24T10:03:36+08:00），金额字段为字符串形式的十进制数（如 "200.00"），前端展示时需自行转换为 Number 并注意精度。</p>
+
+<h2>1.1 服务地址</h2>
+<p>实验阶段后端服务监听本机 http://127.0.0.1:8000。所有接口路径均以此为基础地址拼接。部署环境变化时，仅需替换基础地址部分。</p>
+
+<h2>1.2 接口总览</h2>
+<p>系统共 13 个接口，分为三类：面向前端用户的接口（使用 Token 鉴权）、面向管理员的接口（Token 加管理员权限）、面向合作网站的对外接口（使用 Api-Key 鉴权）。</p>
+<table>
+<caption>表 1　接口总览</caption>
+<thead><tr><th>序号</th><th>接口</th><th>方法</th><th>路径</th><th>鉴权</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>注册</td><td>POST</td><td>/api/register</td><td>无</td><td>客户或管理员注册</td></tr>
+<tr><td>2</td><td>登录</td><td>POST</td><td>/api/login</td><td>无</td><td>签发 Token</td></tr>
+<tr><td>3</td><td>广告列表</td><td>GET</td><td>/api/client/ads</td><td>Token</td><td>前端查看本人广告</td></tr>
+<tr><td>4</td><td>新建广告</td><td>POST</td><td>/api/ads</td><td>Token</td><td>创建广告并送审</td></tr>
+<tr><td>5</td><td>待审核列表</td><td>GET</td><td>/api/audit/pending</td><td>Token + 管理员</td><td>管理员查看待审核广告</td></tr>
+<tr><td>6</td><td>审核通过</td><td>POST</td><td>/api/audit/{id}/pass</td><td>Token + 管理员</td><td>通过后进入投放池</td></tr>
+<tr><td>7</td><td>审核驳回</td><td>POST</td><td>/api/audit/{id}/reject</td><td>Token + 管理员</td><td>需填写驳回原因</td></tr>
+<tr><td>8</td><td>充值</td><td>POST</td><td>/api/recharge</td><td>Token</td><td>更新余额并记流水</td></tr>
+<tr><td>9</td><td>充值流水</td><td>GET</td><td>/api/recharges</td><td>Token</td><td>查看本人充值记录</td></tr>
+<tr><td>10</td><td>站内信</td><td>GET</td><td>/api/notifications</td><td>Token</td><td>查看通知列表</td></tr>
+<tr><td>11</td><td>数据报表</td><td>GET</td><td>/api/report</td><td>Token</td><td>汇总统计</td></tr>
+<tr><td>12</td><td>对外拉广告</td><td>GET</td><td>/api/ads</td><td>Api-Key</td><td>合作网站拉取可投放广告</td></tr>
+<tr><td>13</td><td>事件回传</td><td>POST</td><td>/api/track</td><td>Api-Key</td><td>曝光或点击上报</td></tr>
+</tbody>
+</table>
+
+<h1 id="s2">二、鉴权约定</h1>
+
+<h2>2.1 用户 Token 鉴权</h2>
+<p>除注册、登录与两个对外接口外，所有接口均需在请求头携带 Token：</p>
+<pre>Authorization: Token &lt;登录返回的 token 值&gt;</pre>
+<p>Token 在登录接口成功响应中返回，同一账号重复登录复用同一 Token。前端应将 Token 持久化保存（如 localStorage），并在每次请求时附带。缺少或无效的 Token 返回 401，响应体为 {"detail": "身份认证信息未提供。"} 或 {"detail": "认证令牌无效。"}。注意后端仅接受 Token 鉴权，不依赖浏览器会话（Cookie 与 Session），前端无需处理 CSRF Token。</p>
+
+<h2>2.2 管理员权限</h2>
+<p>审核相关接口（序号 5、6、7）在 Token 鉴权基础上，额外要求账号具备管理员标记。普通客户访问返回 403，响应体为 {"detail": "您没有执行该操作的权限。"}。前端应据此在界面层区分普通客户与管理员的功能入口。</p>
+
+<h2>2.3 对外接口 Api-Key 鉴权</h2>
+<p>两个对外接口（序号 12、13）使用 Api-Key 鉴权，请求头写法为：</p>
+<pre>Api-Key: test-api-key-2026</pre>
+<p class="callout">&nbsp;&nbsp;重要：必须使用连字符形式 Api-Key，不可写成下划线形式 api_key。Django 开发服务器会剥离请求头名中带下划线的项，导致下划线写法鉴权失败并返回 401。当前实验阶段的 Api-Key 值为 test-api-key-2026，正式部署时由服务端环境变量配置。</p>
+
+<h2>2.4 两类广告接口的区分</h2>
+<p>路径 /api/ads 同时承载两个语义不同的接口，前端务必区分：</p>
+<ul>
+<li>GET /api/ads 是对外接口，供合作网站使用 Api-Key 拉取全部可投放广告。</li>
+<li>POST /api/ads 是用户接口，供当前登录客户使用 Token 新建广告。</li>
+<li>前端查看本人广告列表应使用独立路径 GET /api/client/ads，不要误用 GET /api/ads。</li>
+</ul>
+
+<h1 id="s3">三、用户接口详解</h1>
+
+<h2 id="s3-1">3.1 注册</h2>
+<p>方法与路径：POST /api/register；鉴权：无。</p>
+<table>
+<caption>表 2　注册请求参数</caption>
+<thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>phone</td><td>string</td><td>是</td><td>手机号，唯一，不可重复</td></tr>
+<tr><td>password</td><td>string</td><td>是</td><td>密码，长度不少于 6 位，服务端以 PBKDF2 哈希存储</td></tr>
+<tr><td>nickname</td><td>string</td><td>否</td><td>昵称，默认空字符串</td></tr>
+</tbody>
+</table>
+<p>请求示例：</p>
+<pre>{"phone": "13800000001", "password": "test123456", "nickname": "客户"}</pre>
+<p>成功响应（201 Created）：</p>
+<pre>{
+  "message": "注册成功",
+  "user": {
+    "client_id": 1,
+    "phone": "13800000001",
+    "nickname": "客户",
+    "balance": "0.00",
+    "reg_time": "2026-11-24T10:03:36+08:00"
+  }
+}</pre>
+<p>失败响应：手机号重复返回 400，响应体为 {"phone": ["具有 phone 的 client 已存在。"]}；密码过短返回 400 并在响应中说明字段错误。</p>
+
+<h2 id="s3-2">3.2 登录</h2>
+<p>方法与路径：POST /api/login；鉴权：无。请求参数为 phone（手机号）与 password（密码），均必填。</p>
+<p>成功响应（200 OK）：</p>
+<pre>{
+  "token": "4a07eae5fcbe...",
+  "user": {
+    "client_id": 1,
+    "phone": "13800000001",
+    "nickname": "客户",
+    "balance": "200.00",
+    "reg_time": "2026-11-24T10:03:36+08:00"
+  }
+}</pre>
+<p>失败响应：手机号或密码错误返回 400，响应体包含「手机号或密码错误」。账号被停用返回 400 并提示「账号已停用」。响应中的 user 对象字段与客户端展示所需一致，可直接用于渲染用户信息。</p>
+
+<h2 id="s3-3">3.3 查看广告列表</h2>
+<p>方法与路径：GET /api/client/ads；鉴权：Token。无需请求参数，返回当前登录客户自己的全部广告，按提交时间倒序排列。</p>
+<p>成功响应（200 OK）为数组，每个元素结构如下：</p>
+<pre>[
+  {
+    "ad_id": 25,
+    "client_id": 46,
+    "title": "测试广告",
+    "content": "文案",
+    "image_url": "http://x/i.png",
+    "landing_url": "http://x",
+    "daily_budget": "100.00",
+    "spent": "0.01",
+    "status": "pending",
+    "submit_time": "2026-11-24T11:03:05+08:00",
+    "reject_reason": null
+  }
+]</pre>
+<table>
+<caption>表 3　广告字段说明</caption>
+<thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>ad_id</td><td>number</td><td>广告编号</td></tr>
+<tr><td>client_id</td><td>number</td><td>所属客户编号</td></tr>
+<tr><td>title</td><td>string</td><td>广告标题</td></tr>
+<tr><td>content</td><td>string</td><td>广告文案</td></tr>
+<tr><td>image_url</td><td>string</td><td>图片地址</td></tr>
+<tr><td>landing_url</td><td>string</td><td>落地页地址</td></tr>
+<tr><td>daily_budget</td><td>string</td><td>日预算（金额字符串）</td></tr>
+<tr><td>spent</td><td>string</td><td>已消耗金额（金额字符串）</td></tr>
+<tr><td>status</td><td>string</td><td>状态：pending 待审核 / approved 通过 / rejected 驳回 / paused 暂停</td></tr>
+<tr><td>submit_time</td><td>string</td><td>提交时间（ISO 8601）</td></tr>
+<tr><td>reject_reason</td><td>string 或 null</td><td>驳回原因，未驳回时为 null</td></tr>
+</tbody>
+</table>
+
+<h2 id="s3-4">3.4 新建广告</h2>
+<p>方法与路径：POST /api/ads；鉴权：Token。</p>
+<table>
+<caption>表 4　新建广告请求参数</caption>
+<thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>title</td><td>string</td><td>是</td><td>广告标题</td></tr>
+<tr><td>content</td><td>string</td><td>否</td><td>广告文案</td></tr>
+<tr><td>image_url</td><td>string</td><td>否</td><td>图片地址</td></tr>
+<tr><td>landing_url</td><td>string</td><td>否</td><td>落地页地址</td></tr>
+<tr><td>daily_budget</td><td>string 或 number</td><td>是</td><td>日预算，金额格式</td></tr>
+</tbody>
+</table>
+<p>请求示例：</p>
+<pre>{
+  "title": "测试广告",
+  "content": "文案",
+  "image_url": "http://x/i.png",
+  "landing_url": "http://x",
+  "daily_budget": "100.00"
+}</pre>
+<p>成功响应（201 Created）返回新建广告的完整对象，结构与 3.3 中的元素一致，其中 status 固定为 pending，spent 为 "0.00"。ad_id、spent、status、submit_time、reject_reason 为服务端只读字段，前端提交时无需传入，传入也会被忽略。新建的广告不会立即进入投放池，须经管理员审核通过。</p>
+
+<h2 id="s3-5">3.5 充值</h2>
+<p>方法与路径：POST /api/recharge；鉴权：Token。</p>
+<table>
+<caption>表 5　充值请求参数</caption>
+<thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>amount</td><td>string 或 number</td><td>是</td><td>充值金额，必须大于 0</td></tr>
+<tr><td>order_no</td><td>string</td><td>是</td><td>订单号，全局唯一</td></tr>
+</tbody>
+</table>
+<p>请求示例：</p>
+<pre>{"amount": "200.00", "order_no": "ORD20261124001"}</pre>
+<p>成功响应（200 OK）：</p>
+<pre>{"message": "充值成功", "balance": "200.00"}</pre>
+<p>失败响应：金额格式错误返回 400「充值金额格式错误」；金额非正数返回 400「充值金额必须大于 0」；订单号为空返回 400「订单号不能为空」；订单号重复返回 400「订单号已存在」。业务规则：充值成功后立即更新账户余额并记录流水；若充值后余额低于 50 元，系统自动生成一条余额提醒站内信。接口响应中的 balance 为更新后的最新余额，前端可据此直接刷新余额显示，无需再查用户信息。</p>
+
+<h2 id="s3-6">3.6 查看充值流水</h2>
+<p>方法与路径：GET /api/recharges；鉴权：Token。无需请求参数，返回当前客户的充值记录，按充值时间倒序排列。</p>
+<pre>[
+  {
+    "recharge_id": 22,
+    "amount": "200.00",
+    "order_no": "CURL1795489382",
+    "recharge_time": "2026-11-24T11:03:06+08:00"
+  }
+]</pre>
+
+<h2 id="s3-7">3.7 查看站内信</h2>
+<p>方法与路径：GET /api/notifications；鉴权：Token。无需请求参数，返回当前客户的站内信，按创建时间倒序排列。</p>
+<pre>[
+  {
+    "notice_id": 30,
+    "title": "广告审核结果",
+    "content": "您的广告《测试广告》已审核通过，进入投放池。",
+    "is_read": false,
+    "create_time": "2026-11-24T11:03:06+08:00"
+  }
+]</pre>
+<p>字段 is_read 为是否已读标记（布尔值）。站内信由审核动作（通过或驳回）与低额余额预警自动生成，标题分别为「广告审核结果」与「余额提醒」。当前接口仅提供列表查询，未提供标记已读接口，前端的红点提醒逻辑需自行按 is_read 字段在本地实现。</p>
+
+<h2 id="s3-8">3.8 数据报表</h2>
+<p>方法与路径：GET /api/report；鉴权：Token。无需请求参数，返回当前客户名下广告的汇总统计，供前端图表使用。</p>
+<pre>{
+  "ad_count": 1,
+  "impression_count": 1,
+  "click_count": 1,
+  "total_spent": "0.01"
+}</pre>
+<p>字段 ad_count 为广告数量，impression_count 为曝光次数，click_count 为点击次数，total_spent 为总消耗金额（金额字符串）。该接口返回汇总值，不提供按时间筛选的参数，前端图表可按此口径展示总体数据。</p>
+
+<h1 id="s4">四、管理员接口详解</h1>
+
+<h2>4.1 查看待审核列表</h2>
+<p>方法与路径：GET /api/audit/pending；鉴权：Token 加管理员权限。无需请求参数，返回全部状态为待审核的广告，按提交时间正序排列。响应结构与 3.3 的广告列表一致。非管理员访问返回 403。</p>
+
+<h2>4.2 审核通过</h2>
+<p>方法与路径：POST /api/audit/{id}/pass；鉴权：Token 加管理员权限。路径参数 {id} 为广告编号，无需请求体。成功响应（200 OK）返回更新后的广告对象，其中 status 为 approved。同时系统自动向广告所属客户发送一条标题为「广告审核结果」的站内信。失败响应：广告不存在或不在待审核状态返回 404，响应体为 {"detail": "广告不存在或不在待审核状态"}。已通过的广告不可重复通过。</p>
+
+<h2>4.3 审核驳回</h2>
+<p>方法与路径：POST /api/audit/{id}/reject；鉴权：Token 加管理员权限。路径参数 {id} 为广告编号，请求体必须包含驳回原因：</p>
+<pre>{"reason": "素材违规"}</pre>
+<p>成功响应（200 OK）返回更新后的广告对象，其中 status 为 rejected，reject_reason 为填写的原因。同时自动向客户发送站内信，内容包含驳回原因。失败响应：未填写原因返回 400「驳回必须填写原因」；广告不存在或不在待审核状态返回 404「广告不存在或不在待审核状态」。已驳回的广告不可再执行通过操作。</p>
+
+<h1 id="s5">五、对外接口详解</h1>
+
+<h2>5.1 拉取可投放广告</h2>
+<p>方法与路径：GET /api/ads；鉴权：Api-Key。请求头携带 Api-Key，无需请求参数。返回全部审核通过且日预算未耗尽的广告，按提交时间倒序排列，响应结构与 3.3 的广告列表一致。无符合条件的广告时返回空数组 []（200 OK），这是正常业务响应，不是错误。Api-Key 缺失或错误返回 401 且不返回任何业务数据。</p>
+
+<h2>5.2 事件回传</h2>
+<p>方法与路径：POST /api/track；鉴权：Api-Key。</p>
+<table>
+<caption>表 6　事件回传请求参数</caption>
+<thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>ad_id</td><td>number</td><td>是</td><td>广告编号</td></tr>
+<tr><td>event_type</td><td>string</td><td>是</td><td>事件类型：impression 曝光或 click 点击</td></tr>
+<tr><td>source</td><td>string</td><td>否</td><td>来源标识，默认空字符串</td></tr>
+</tbody>
+</table>
+<p>请求示例：</p>
+<pre>{"ad_id": 25, "event_type": "click", "source": "partner-a"}</pre>
+<p>成功响应（201 Created）：{"detail": "ok"}。失败响应：Api-Key 错误返回 401「Unauthorized」；event_type 非 impression 或 click 返回 400「event_type 无效」；广告不存在返回 400「广告不存在」。业务规则：每次回传写入一条展示记录；点击事件额外累加广告消耗，单次点击消耗 0.01 元。该消耗会反映在广告的 spent 字段与报表接口的 total_spent 中。</p>
+
+<h1 id="s6">六、错误码汇总</h1>
+<table>
+<caption>表 7　HTTP 状态码说明</caption>
+<thead><tr><th>HTTP 状态码</th><th>含义</th><th>常见场景</th></tr></thead>
+<tbody>
+<tr><td>200</td><td>成功</td><td>查询类接口、登录、充值、审核动作</td></tr>
+<tr><td>201</td><td>创建成功</td><td>注册、新建广告、事件回传</td></tr>
+<tr><td>400</td><td>请求参数错误</td><td>密码错误、手机号重复、金额非法、驳回无原因、event_type 无效</td></tr>
+<tr><td>401</td><td>未认证或鉴权失败</td><td>Token 缺失或无效、Api-Key 缺失或错误</td></tr>
+<tr><td>403</td><td>权限不足</td><td>非管理员访问审核接口</td></tr>
+<tr><td>404</td><td>资源不存在或状态不符</td><td>审核目标广告不存在或不在待审核状态</td></tr>
+</tbody>
+</table>
+<p>所有错误响应均为 JSON 格式，错误信息在 detail 字段（或序列化器的字段错误对象中）返回，前端可直接提取展示。</p>
+
+<h1 id="s7">七、前端接入建议</h1>
+<ol>
+<li>认证流程：应用启动时读取本地保存的 Token；若无 Token，跳转登录页。登录成功后保存 Token 并进入主界面。所有受保护请求在请求拦截器中统一注入 Authorization: Token 请求头。</li>
+<li>响应拦截：对 401 响应清除本地 Token 并跳转登录页；对 403 响应提示无权限；对 400 响应展示 detail 或字段错误信息。</li>
+<li>金额处理：所有金额字段为字符串，展示前转换为 Number；涉及计算的场景注意使用适当的精度处理，避免浮点误差。</li>
+<li>状态映射：广告状态为英文枚举值，前端展示时映射为中文标签：pending 待审核、approved 已通过、rejected 已驳回、paused 已暂停。</li>
+<li>接口区分：前端广告列表使用 GET /api/client/ads，对外拉广告 GET /api/ads 仅供合作网站使用，两者不可混用。</li>
+<li>图片与落地页：image_url 与 landing_url 由前端提交完整地址，后端仅做存储与返回，不做校验。</li>
+<li>报表图表：数据报表接口返回汇总值，可直接作为 ECharts 等图表组件的数据源。</li>
+</ol>
+
+<h1 id="s8">八、联调验证说明</h1>
+<p>后端已提供可重复执行的端到端测试脚本，位于 backend/tests/curl_test_final.sh。该脚本覆盖全部 13 个接口与鉴权边界，执行后各接口均返回预期状态码，并核对点击消耗为 0.01 元。前端开发人员可运行此脚本确认后端服务处于可用状态：</p>
+<pre>bash "D:/软件工程作业/backend/tests/curl_test_final.sh"</pre>
+<p>脚本会自动清理历史测试账号，可重复执行。若脚本全部通过，说明后端服务与数据库正常，可开始前端联调。</p>
+
+</section>
+</body>
+</html>
