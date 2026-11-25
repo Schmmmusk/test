@@ -38,7 +38,7 @@ class LoginSerializer(serializers.Serializer):
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ["client_id", "phone", "nickname", "balance", "reg_time"]
+        fields = ["client_id", "phone", "nickname", "balance", "reg_time", "is_admin"]
         read_only_fields = fields
 
 
